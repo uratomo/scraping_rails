@@ -1,0 +1,21 @@
+version: "3"
+services:
+  web:
+    build: . # imageがなかったらdockerfileからimageをbuildし引っ張ってくる
+    command: bundle exec rails server -p 3000 -b 0.0.0.0
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    depends_on: # 依存関係。依存あるものより先にbuildされなくなる
+      - db
+    tty: true
+    stdin_open: true
+  db:
+    image: mysql:5.7
+    volumes:
+      - db-volume:/var/lib/mysql #コンテナが終了してもデータベースにデータが保持されるようにしておける
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+volumes:
+  db-volume: # localに存在しないため、無理やり作成した。
