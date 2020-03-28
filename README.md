@@ -1,17 +1,25 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+docker による rails の環境構築を行いました
+
+初期環境構築
+
+- docker-compose run web rake db:create
+- docker-compose run web bundle exec rake db:migrate
+
+サーバの立ち上げ方
+
+- docker-compose up
 
 Things you may want to cover:
 
-* Ruby version
+- Ruby version
 
-* System dependencies
+- System dependencies
 
-* Configuration
+- Configuration
 
-* Database creation
+- Database creation
 
 * Database initialization
 
@@ -19,6 +27,6 @@ Things you may want to cover:
 
 * Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
+- Deployment instructions
 
-* ...
+- ...
