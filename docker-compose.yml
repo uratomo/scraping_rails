@@ -3,14 +3,14 @@ services:
   web:
     build: . # imageがなかったらdockerfileからimageをbuildし引っ張ってくる
     command: "/app/docker-entrypoint.sh"
+    stdin_open: true
+    tty: true
     ports:
       - 3001:3001
     volumes:
       - .:/app
     depends_on: # 依存関係。依存あるものより先にbuildされなくなる
       - db
-    tty: true
-    stdin_open: true
   db:
     image: mysql:5.7
     volumes:
