@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  suumo_number: MyString
+  floor: MyString
+  area: 1
+  age: 1
+  structure: 
+
+two:
+  suumo_number: MyString
+  floor: MyString
+  area: 1
+  age: 1
+  structure: 
