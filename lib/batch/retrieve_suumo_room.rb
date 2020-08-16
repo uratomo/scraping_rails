@@ -18,7 +18,7 @@ class RetrieveSuumoRoom
 
       # マナー
       puts "#{search_url}"
-      sleep 10
+      sleep rand(3..7)
     end
     output = output_csv(links).force_encoding("utf-8")
     puts "#{output.encoding}"
@@ -67,16 +67,16 @@ class RetrieveSuumoRoom
           table_area.at("tr[2]/td/div[3]")&.inner_text, # 最寄り駅3
           (show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[1]/span[1]')&.inner_text&.to_f * 10000)&.to_i, # 賃料
           show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[1]/span[2]/text()').inner_text.gsub(//,)&.to_s&.to_i, # 管理費
-          (show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[1]')&.inner_text.match(/\d+(?:\.\d+)?/)&.to_s&.to_f * 1000)&.to_i, # 敷金
-          (show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[1]')&.inner_text&.match(/\d+(?:\.\d+)?/)&.to_s&.to_f * 1000)&.to_i, # 礼金
-          (show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[3]')&.inner_text.match(/\d+(?:\.\d+)?/)&.to_s&.to_f * 1000).to_i, # 保証
-          (show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[4]')&.inner_text.match(/\d+(?:\.\d+)?/).to_s.to_f * 1000)&.to_i, # 敷引,償却
+          show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[1]')&.inner_text.match(/\d+(?:\.\d+)?/)&.to_s&.to_f, # 敷金
+          show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[1]')&.inner_text&.match(/\d+(?:\.\d+)?/)&.to_s&.to_f, # 礼金
+          show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[3]')&.inner_text.match(/\d+(?:\.\d+)?/)&.to_s&.to_f, # 保証
+          show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[4]')&.inner_text.match(/\d+(?:\.\d+)?/).to_s.to_f, # 敷引,償却
           show_page.at('//*[@id="contents"]/div[4]/table/tr[7]/td/ul/li')&.inner_text&.gsub(/\t|\r|\n/,""), # 仲介手数料
         ]
         writer << csv_body
         # マナー
         puts "#{csv_body}"
-        sleep 10
+        sleep rand(7..12)
       end
     end
   end
@@ -85,15 +85,4 @@ class RetrieveSuumoRoom
     agent = Mechanize.new
     agent.get(link)
   end
-  # ひとまずのDB化をするに当たってのclass仮
-  # building
-    # suumo_number:string floor:string area:integer age:integer structure:preferences
-  # station class (最寄り駅を割り出すclass)
-    # building:references name:string walk:integer
-  # address class(住所住処がわかる) tokyo sumida などで分けていく
-    # building:references city:string ward:string line:string
-  # structure(建造物) class (あらかじめデータを作っておく)
-   # name:string (鉄筋や、鉄骨)
-  # cost関連 はひとまずまとめる
-   # building:references rent:integer administration_fee:integer set_deposit:integer reward:integer bond_payment:integer repaymentinteger commision:integer
 end
