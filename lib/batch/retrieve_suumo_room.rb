@@ -52,31 +52,35 @@ class RetrieveSuumoRoom
       ]
       writer << csv_header
       links.each do |link|
-        show_page = link.click
-        # table_areaいらない
-        table_area = show_page.search("//*[@id='js-view_gallery']/div[3]/table")
-        csv_body = [
-          show_page.at('//*[@id="contents"]/div[4]/table/tr[6]/td[1]')&.inner_text.presence || show_page.at('//*[@id="contents"]/div[2]/table/tr[6]/td[1]')&.inner_text, # 物件コード
-          table_area.at("tr[1]/td")&.inner_text, # 住所
-          table_area.at("tr[3]/td[2]")&.inner_text, # 間取り
-          table_area.at("tr[3]/td[4]")&.inner_text.to_f, #専有面積
-          show_page.at('//*[@id="js-view_gallery"]/div[3]/table/tr[4]/td[1]')&.inner_text.match(/\d+/).to_s.to_i, # 築年数
-          show_page.at('//*[@id="contents"]/div[4]/table/tr[1]/td[2]')&.inner_text&.gsub(/\t|\r|\n/,"").presence || show_page.at('//*[@id="contents"]/div[2]/table/tr[1]/td[2]')&.inner_text&.gsub(/\t|\r|\n/,""), # 構造
-          table_area.at("tr[2]/td/div[1]")&.inner_text, # 最寄り駅1
-          table_area.at("tr[2]/td/div[2]")&.inner_text, # 最寄り駅2
-          table_area.at("tr[2]/td/div[3]")&.inner_text, # 最寄り駅3
-          (show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[1]/span[1]')&.inner_text&.to_f * 10000)&.to_i, # 賃料
-          show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[1]/span[2]/text()').inner_text.gsub(//,)&.to_s&.to_i, # 管理費
-          show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[1]')&.inner_text.match(/\d+(?:\.\d+)?/)&.to_s&.to_f, # 敷金
-          show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[1]')&.inner_text&.match(/\d+(?:\.\d+)?/)&.to_s&.to_f, # 礼金
-          show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[3]')&.inner_text.match(/\d+(?:\.\d+)?/)&.to_s&.to_f, # 保証
-          show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[4]')&.inner_text.match(/\d+(?:\.\d+)?/).to_s.to_f, # 敷引,償却
-          show_page.at('//*[@id="contents"]/div[4]/table/tr[7]/td/ul/li')&.inner_text&.gsub(/\t|\r|\n/,""), # 仲介手数料
-        ]
-        writer << csv_body
-        # マナー
-        puts "#{csv_body}"
-        sleep rand(7..12)
+        begin
+          show_page = link.click
+          # table_areaいらない
+          table_area = show_page.search("//*[@id='js-view_gallery']/div[3]/table")
+          csv_body = [
+            show_page.at('//*[@id="contents"]/div[4]/table/tr[6]/td[1]')&.inner_text.presence || show_page.at('//*[@id="contents"]/div[2]/table/tr[6]/td[1]')&.inner_text, # 物件コード
+            table_area.at("tr[1]/td")&.inner_text, # 住所
+            table_area.at("tr[3]/td[2]")&.inner_text, # 間取り
+            table_area.at("tr[3]/td[4]")&.inner_text.to_f, #専有面積
+            show_page.at('//*[@id="js-view_gallery"]/div[3]/table/tr[4]/td[1]')&.inner_text.match(/\d+/).to_s.to_i, # 築年数
+            show_page.at('//*[@id="contents"]/div[4]/table/tr[1]/td[2]')&.inner_text&.gsub(/\t|\r|\n/,"").presence || show_page.at('//*[@id="contents"]/div[2]/table/tr[1]/td[2]')&.inner_text&.gsub(/\t|\r|\n/,""), # 構造
+            table_area.at("tr[2]/td/div[1]")&.inner_text, # 最寄り駅1
+            table_area.at("tr[2]/td/div[2]")&.inner_text, # 最寄り駅2
+            table_area.at("tr[2]/td/div[3]")&.inner_text, # 最寄り駅3
+            (show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[1]/span[1]')&.inner_text&.to_f * 10000)&.to_i, # 賃料
+            show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[1]/span[2]/text()').inner_text.gsub(//,)&.to_s&.to_i, # 管理費
+            show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[1]')&.inner_text.match(/\d+(?:\.\d+)?/)&.to_s&.to_f, # 敷金
+            show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[1]')&.inner_text&.match(/\d+(?:\.\d+)?/)&.to_s&.to_f, # 礼金
+            show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[3]')&.inner_text.match(/\d+(?:\.\d+)?/)&.to_s&.to_f, # 保証
+            show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[4]')&.inner_text.match(/\d+(?:\.\d+)?/).to_s.to_f, # 敷引,償却
+            show_page.at('//*[@id="contents"]/div[4]/table/tr[7]/td/ul/li')&.inner_text&.gsub(/\t|\r|\n/,""), # 仲介手数料
+          ]
+          writer << csv_body
+          # マナー
+          puts "#{csv_body}"
+          sleep rand(7..10)
+        rescue
+          next
+        end
       end
     end
   end
