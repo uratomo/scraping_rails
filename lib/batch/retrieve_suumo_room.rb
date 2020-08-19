@@ -22,7 +22,8 @@ class RetrieveSuumoRoom
     end
     output = output_csv(links).force_encoding("utf-8")
     puts "#{output.encoding}"
-    file_path = File.join(Rails.root, 'tmp', "#{Time.now.strftime('%Y%m')}_rental_list.csv")
+    # seed用のcsvのため、保存先をdbに回してみる
+    file_path = File.join(Rails.root, 'lib/seeds', "building_list.csv")
     File.open(file_path, 'w:UTF-8') do |f|
       f.puts output
     end
@@ -70,7 +71,7 @@ class RetrieveSuumoRoom
             show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[1]/span[2]/text()').inner_text.gsub(//,)&.to_s&.to_i, # 管理費
             show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[1]')&.inner_text.match(/\d+(?:\.\d+)?/)&.to_s&.to_f, # 敷金
             show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[1]')&.inner_text&.match(/\d+(?:\.\d+)?/)&.to_s&.to_f, # 礼金
-            show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[3]')&.inner_text.match(/\d+(?:\.\d+)?/)&.to_s&.to_f, # 保証
+            show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[3]')&.inner_text.match(/\d+(?:\.\d+)?/)&.to_s&.to_f || 0, # 保証
             show_page.at('//*[@id="js-view_gallery"]/div[1]/div[1]/div[2]/span[4]')&.inner_text.match(/\d+(?:\.\d+)?/).to_s.to_f, # 敷引,償却
             show_page.at('//*[@id="contents"]/div[4]/table/tr[7]/td/ul/li')&.inner_text&.gsub(/\t|\r|\n/,""), # 仲介手数料
           ]
